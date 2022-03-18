@@ -22,7 +22,7 @@ app.get("/:id", [auth, getService], (req, res, next) => {
 
 // CREATE a service
 app.post("/", auth, async (req, res, next) => {
-  const {title, category, description, price, img } = req.body;
+  const {title, category, description, price, img, creator } = req.body;
   let service;
   img
     ? (service = new Services({
@@ -30,7 +30,8 @@ app.post("/", auth, async (req, res, next) => {
       category, 
       description, 
       img,
-      price
+      price,
+      creator
       
       }))
     : (service = new Services({
@@ -38,7 +39,8 @@ app.post("/", auth, async (req, res, next) => {
       category,
       description,
       price,
-      img
+      img,
+      creator: req.user._id
       }));
 
   try {
@@ -51,9 +53,6 @@ app.post("/", auth, async (req, res, next) => {
 
 // UPDATE a service
 app.put("/:id", [auth, getService], async (req, res, next) => {
-    res
-      .status(400)
-      .json({ message: "You do not have the permission to update this service" });
   const { title, category, description, price, img} = req.body;
   if (title) res.service.title = title;
   if (category) res.service.category = category;
@@ -70,7 +69,7 @@ app.put("/:id", [auth, getService], async (req, res, next) => {
 
 // DELETE a service
 app.delete("/:id", [auth, getService], async (req, res, next) => {
-  if (req.user._id !== req.service.created_by)
+  if (req.user._id !== req.service.creator)
     res
       .status(400)
       .json({ message: "You do not have the permission to delete this service" });

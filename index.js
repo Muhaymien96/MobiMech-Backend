@@ -13,7 +13,7 @@ const userRouter = require("./routes/userRouter");
 const contactRouter = require('./routes/contactRouter');
 const serviceRouter = require('./routes/serviceRouter');
 const mechanicRouter = require('./routes/mechanicRouter');
-
+const bookingRouter = require('./routes/bookingRouter');
 
 
 // Setting up MongoDB connection
@@ -152,8 +152,8 @@ req, res, next) => {
           },
         },
       },
-      product_routes: {
-        all_products: {
+      service_routes: {
+        all_services: {
           method: "GET",
           request_body: {
             title: "String",
@@ -161,18 +161,18 @@ req, res, next) => {
             description: "String",
             img: "String",
             price: "Number",
-            created_by: "Number",
-            quantity: "Number"
+            created_by: "Number"
+            
           },
           route: "/products",
           headers: {
             authorization: "Bearer (JWT token)",
           },
           result: {
-            products: "Object",
+            services: "Object",
           },
         },
-        single_product: {
+        single_service: {
           method: "GET",
           request_body: {
             title: "String",
@@ -180,20 +180,20 @@ req, res, next) => {
             description: "String",
             img: "String",
             price: "Number",
-            created_by: "Number",
-            quantity: "Number"
+            created_by: "Number"
+           
           },
-          route: "/products/:product_id",
+          route: "/services/:service_id",
           headers: {
             authorization: "Bearer (JWT token)",
           },
           result: {
-            product: "Object",
+            service: "Object",
           },
         },
-        create_product: {
+        create_service: {
           method: "POST",
-          route: "/products",
+          route: "/services",
           headers: {
             authorization: "Bearer (JWT token)",
           },
@@ -203,14 +203,14 @@ req, res, next) => {
             description: "String",
             img: "String",
             price: "Number",
-            created_by: "Number",
-            quantity: "Number"
+            created_by: "Number"
+          
           },
           result: {
-            product: "Object",
+            service: "Object",
           },
         },
-        update_product: {
+        update_service: {
           method: "PUT",
           request_body: {
             title: "String",
@@ -218,20 +218,20 @@ req, res, next) => {
             description: "String",
             img: "String",
             price: "Number",
-            created_by: "Number",
-            quantity: "Number"
+            created_by: "Number"
+           
           },
-          route: "/products/:product_id",
+          route: "/services/:service_id",
           headers: {
             authorization: "Bearer (JWT token)",
           },
           result: {
-            product: "Object",
+            service: "Object",
           },
         },
-        delete_product: {
+        delete_service: {
           method: "DELETE",
-          route: "/products/:product_id",
+          route: "/services/:service_id",
           result: {
             message: "Object",
           },
@@ -245,6 +245,7 @@ app.use("/users", userRouter);
 app.use("/services", serviceRouter);
 app.use("/contact", contactRouter);
 app.use("/mechanics", mechanicRouter);
+app.use("/bookings", bookingRouter);
 
 
 

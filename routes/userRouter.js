@@ -5,7 +5,7 @@ const auth = require("../middleware/auth");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const {
-  getUser, getMechanic, getService
+  getUser
 } = require("../middleware/finders");
 
 const app = express.Router();
@@ -26,7 +26,7 @@ app.get("/", async (req, res) => {
 });
 
 // GET one user
-app.get("/single-user/", auth, async(req, res, next) => {
+app.get("/:id", auth, async(req, res, next) => {
   try {
     const user = await Users.findById(req.user._id)
   res.status(201).json(user)
@@ -119,17 +119,19 @@ app.post("/", async (req, res, next) => {
 });
 
 // UPDATE a user
-app.put("/",auth, async (req, res, next) => {
+app.put("/:id",auth, async (req, res, next) => {
   const user = await Users.findById(req.user._id)
   const {
     name,
     contact,
+    email,
     password,
     address
   } = req.body;
   if (name) user.name = name;
   if (contact) user.contact = contact;
   if (address) user.address = address;
+  if (email) user.email = email;
   if (password) {
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -153,56 +155,12 @@ app.put("/",auth, async (req, res, next) => {
 });
 
 // DELETE a user
-app.delete("/:id", getUser, async (req, res, next) => {
+app.delete("/:id", auth, async (req, res, next) => {
   try {
-    const user = await Users.findById(req.user._id)
-    await user.remove();
+    await res.user.remove();
     res.json({ message: "Deleted user" });
   } catch (error) {
     res.status(500).json({ message: error.message });
-  }
-});
-
-//BOOKINGS
-
-// New Booking
-app.post("/:id/", [auth, getService, getMechanic], async (req, res, next) => {
-  const user = await Users.findById(req.user._id);
-  // console.log(user)
-  let user_id = req.user._id;
-  let name = res.user.name;
-  let contact = res.user.contact;
-  let vehicle = res.user.vehicle;
-  let address = res.user.address;
-  let service_id = res.service._id;
-  let mech_name = res.mechanic.name;
-  let category = res.service.category;
-  let img = res.service.img;
-  let price = res.service.price;
-  let booking_date = req.body;
-  
-
-  try {
-    user.bookings.push({
-      user_id,
-      name,
-      vehicle,
-      address,
-      contact,
-      mechanic_id,
-      mech_name,
-      service_id,
-      service_title,
-      category,
-      img,
-      price,
-      booking_date,
-     
-    });
-    const updatedUser = await user.save();
-    res.status(201).json(updatedUser);
-  } catch (error) {
-    res.status(500).json(console.log(error));
   }
 });
 

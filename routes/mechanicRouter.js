@@ -25,9 +25,9 @@ app.get("/", async (req, res) => {
 });
 
 // GET one mechanic
-app.get("/single-mechanic/", auth, async(req, res, next) => {
+app.get("/:id", [auth, getMechanic], async(req, res, next) => {
   try {
-    const mechanic = await Mechanics.findById(req.mechanic._id)
+    const mechanic = await Mechanics.findById(res.mechanic._id)
   res.status(201).json(mechanic)
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -40,57 +40,39 @@ app.post("/", async (req, res, next) => {
     name,
     email,
     contact,
-    experience,
-    address_m
+    experience
+   
   } = req.body;
 
   const mechanic = new Mechanics({
     name,
     email,
     contact,
-    experience,
-    address_m
+    experience
+  
   });
 
   try {
     const newMechanic = await mechanic.save();
-
-    try {
-      const access_token = jwt.sign(
-        JSON.stringify(newMechanic),
-        process.env.ACCESS_TOKEN_SECRET
-      );
-      res.status(201).json({
-        jwt: access_token
-      });
-    } catch (error) {
-      res.status(500).json({
-        message: error.message
-      });
-    }
+    res.status(201).json(newMechanic);
   } catch (error) {
-    res.status(400).json({
-      message: error.message
-    });
+    res.status(400).json({ message: error.message });
   }
 });
 
 // UPDATE a mechanic
-app.put("/",auth, async (req, res, next) => {
-  const mechanic = await Mechanics.findById(req.mechanic._id)
+app.put("/:id",[auth, getMechanic], async (req, res, next) => {
+  const mechanic = await Mechanics.findById(res.mechanic._id)
   const {
     name,
     email,
     contact,
-    experience,
-    address_m
-  
+    experience
   } = req.body;
   if (name) mechanic.name = name;
   if (contact) mechanic.contact = contact;
   if (email) mechanic.email = email;
   if (experience) mechanic.experience = experience;
-  if (address_m) mechanic.address_m = address_m;
   try {
     const updatedMechanic = await mechanic.save();
 
@@ -99,7 +81,7 @@ app.put("/",auth, async (req, res, next) => {
         JSON.stringify(updatedMechanic),
         process.env.ACCESS_TOKEN_SECRET
       );
-      res.status(201).json({ jwt: token, mechanic: updatedMechanic });
+      res.status(201).json({ mechanic: updatedMechanic });
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
@@ -110,9 +92,9 @@ app.put("/",auth, async (req, res, next) => {
 });
 
 // DELETE a mechanic
-app.delete("/:id", getMechanic, async (req, res, next) => {
+app.delete("/:id", [auth,getMechanic], async (req, res, next) => {
   try {
-    const mechanic = await Mechanics.findById(req.mechanic._id)
+    const mechanic = await Mechanics.findById(res.mechanic._id)
     await mechanic.remove();
     res.json({ message: "Deleted mechanic" });
   } catch (error) {

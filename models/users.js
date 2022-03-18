@@ -1,6 +1,9 @@
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
+  user_id:{
+    type: String
+  },
   name: {
     type: String,
     required: true,
@@ -31,6 +34,9 @@ const userSchema = new mongoose.Schema({
   },
   vehicles: [
     {
+      vehicle_id:{
+        type: String
+      },
       trim_id: {
         type: String
       },
@@ -44,11 +50,7 @@ const userSchema = new mongoose.Schema({
         type: String
       }
     }
-  ],
-  bookings:{
-    type: Array,
-    default: []
-  }
+  ]
 });
 
 module.exports = mongoose.model("Users", userSchema);

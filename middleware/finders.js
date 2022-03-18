@@ -2,6 +2,7 @@
 const Users = require("../models/users");
 const Services = require("../models/services");
 const Mechanics = require("../models/mechanics");
+const Bookings = require("../models/bookings")
 
 async function getUser(req, res, next) {
   let user;
@@ -39,4 +40,16 @@ async function getMechanic(req, res, next) {
   res.mechanic = mechanic;
   next();
 }
-module.exports = { getUser, getService, getMechanic};
+
+async function getBooking(req, res, next) {
+  let booking;
+  try {
+   booking = await Bookings.findById(req.params.id);
+    if (!booking) res.status(404).json({ message: "Could not find booking" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+  res.booking = booking;
+  next();
+}
+module.exports = { getUser, getService, getMechanic, getBooking};

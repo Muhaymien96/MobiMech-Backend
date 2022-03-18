@@ -19,6 +19,9 @@ const serviceSchema = new mongoose.Schema({
   },
   img: {
     type: String
+  },
+  creator:{
+    type: String
   }
 });
 
