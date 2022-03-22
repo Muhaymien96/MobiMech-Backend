@@ -164,7 +164,7 @@ req, res, next) => {
             created_by: "Number"
             
           },
-          route: "/products",
+          route: "/services",
           headers: {
             authorization: "Bearer (JWT token)",
           },
