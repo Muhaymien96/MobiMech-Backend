@@ -69,7 +69,7 @@ app.put("/:id", [auth, getService], async (req, res, next) => {
 
 // DELETE a service
 app.delete("/:id", [auth, getService], async (req, res, next) => {
-  if (req.user._id !== req.service.creator)
+  if (req.user._id !== res.service.creator)
     res
       .status(400)
       .json({ message: "You do not have the permission to delete this service" });

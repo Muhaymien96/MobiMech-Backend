@@ -71,6 +71,7 @@ app.patch("/", async (req, res, next) => {
   }
 });
 
+
 // REGISTER a user
 app.post("/", async (req, res, next) => {
   const {
@@ -79,8 +80,6 @@ app.post("/", async (req, res, next) => {
     password,
     contact,
     address,
-    vehicles
-
   } = req.body;
 
   const salt = await bcrypt.genSalt();
@@ -91,8 +90,7 @@ app.post("/", async (req, res, next) => {
     email,
     password: hashedPassword,
     contact,
-    address,
-    vehicles
+    address
   });
 
   try {
@@ -103,20 +101,15 @@ app.post("/", async (req, res, next) => {
         JSON.stringify(newUser),
         process.env.ACCESS_TOKEN_SECRET
       );
-      res.status(201).json({
-        jwt: access_token
-      });
+      res.status(201).json({ jwt: access_token });
     } catch (error) {
-      res.status(500).json({
-        message: error.message
-      });
+      res.status(500).json({ message: error.message });
     }
   } catch (error) {
-    res.status(400).json({
-      message: error.message
-    });
+    res.status(400).json({ message: error.message });
   }
-});
+});   
+
 
 // UPDATE a user
 app.put("/:id",auth, async (req, res, next) => {

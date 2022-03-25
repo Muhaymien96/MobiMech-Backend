@@ -10,6 +10,9 @@ const bookingSchema = new mongoose.Schema({
   service_by: {
     type: String
   },
+  address: {
+    type: String
+  },
   booking_date: {
     type: String,
     required: true
