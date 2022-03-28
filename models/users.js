@@ -32,7 +32,7 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
-  vehicles: [
+  vehicles: 
     {
       vehicle_id:{
         type: String
@@ -50,7 +50,6 @@ const userSchema = new mongoose.Schema({
         type: String
       }
     }
-  ]
 });
 
 module.exports = mongoose.model("Users", userSchema);
