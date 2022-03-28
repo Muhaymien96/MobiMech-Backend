@@ -22,12 +22,11 @@ app.get("/:id", [auth, getBooking], (req, res, next) => {
 
 // CREATE a booking
 app.post("/", [auth, getMechanic, getService], async (req, res, next) => {
-  const {booking_date, special_instructions, service_by, created_by, address } = req.body;
+  const {booking_date, service_by, created_by, address } = req.body;
   let booking;
   img
     ? (booking = new Bookings({
       booking_date,
-      special_instructions, 
       service_by, 
       address,
       created_by
@@ -36,7 +35,6 @@ app.post("/", [auth, getMechanic, getService], async (req, res, next) => {
     : (booking = new Bookings({
       booking_date, 
       address,
-      special_instructions, 
       service_by: res.mechanic._id, 
       created_by: req.user._id
       }));
@@ -51,10 +49,10 @@ app.post("/", [auth, getMechanic, getService], async (req, res, next) => {
 
 // UPDATE a booking
 app.put("/:id", [auth, getService], async (req, res, next) => {
-  const { booking_date, special_instructions} = req.body;
+  const { booking_date, address} = req.body;
   if (booking_date) res.booking.booking_date = booking_date;
   if (address) res.booking.address = address;
-  if (special_instructions) res.booking.special_instructions = special_instructions;
+ 
   
   try {
     const updatedBooking = await res.booking.save();
