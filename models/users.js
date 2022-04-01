@@ -35,16 +35,16 @@ const userSchema = new mongoose.Schema({
   vehicles: 
     [{
       vehicle_id:{
-        type: String
-      },
-      trim_id: {
-        type: String
-      },
-      make: {
       type: String
       },
-      model: {
-      type: String
+      maker: {
+        type: String
+        },
+        genmodel: {
+        type: String
+        },
+      trim: {
+        type: String
       },
       year: {
         type: String
